@@ -40,6 +40,7 @@ class Student extends Person {
         this.previousBackground = attributes.previousBackground;
         this.className = attributes.className;
         this.favSubjects = attributes.favSubjects;
+        this.grade = Math.round(Math.random()*100);
     }
     listsSubjects() {
         var x;
@@ -53,6 +54,25 @@ class Student extends Person {
     }
     sprintChallenge(subject) {
         console.log(`${this.name} has begun sprint challenge on ${subject}.`);
+    }
+    graduate(graders) {
+        while (true) {
+            // Display current grade
+            console.log(`${this.name}'s current overall grade is ${this.grade}.`)
+
+            // Select a grader at random from the provided list of graders
+            var grader = graders[Math.floor(Math.random()*graders.length)];
+
+            // Student graduates if he's at 70 or above
+            if (this.grade >= 70) {
+                console.log(`Congratulations, ${this.name}! Your overall grade is ${this.grade}, you have successfully graduated.`)
+                break;
+            }
+
+            // If student hasn't graduated, grader grades his work and adds or subtracts from his grade
+            grader.addGrade(this);
+        }
+        
     }
 }
 
@@ -99,6 +119,28 @@ class Instructor extends Person {
     }
     grade(student, subject) {
         console.log(`${student.name} receives a perfect score on ${subject}.`)
+    }
+    addGrade(student) {
+
+        // Determine a random number from -30 to 30
+        var addedGrade = Math.round((Math.random() - 0.5) * 60);
+
+        // Add (or subtract) that number from the student's overall grade
+        student.grade += addedGrade;
+
+        // Display on the console what was added or subtracted
+        if (addedGrade > 0) {
+            console.log(`${this.name} has graded ${student.name}'s work and adds ${addedGrade} points to his overall grade.`);
+        }
+        else if (addedGrade < 0) {
+            console.log(`${this.name} has graded ${student.name}'s work and subtracts ${addedGrade} points from his overall grade.`);
+        }
+        else {
+            console.log(`${this.name} has graded ${student.name}'s work and adds no points from his overall grade.`);
+        }
+
+        // Return the student object with the updated grade value
+        return student;
     }
 }
 
@@ -160,3 +202,5 @@ matt.speak();
 bob.demo("HMTL");
 matt.standup("Web24_Lecture");
 matt.debugsCode(rob, "CSS");
+
+rob.graduate([bob,ed,matt]);
